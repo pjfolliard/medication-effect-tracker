@@ -1,96 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
-  <title>Medication Effect Tracker</title>
-  <style>
-    :root { --bg:#f3f4f6; --card:#fff; --ink:#111827; --muted:#6b7280; --line:#d1d5db; --accent:#2563eb; --danger:#b91c1c; --success:#166534; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
-    main { max-width:720px; margin:auto; padding:18px 14px 48px; }
-    h1 { font-size:1.65rem; margin:0 0 4px; }
-    h2 { margin:0 0 12px; }
-    .subtitle { margin:0 0 18px; color:var(--muted); }
-    .card { background:var(--card); border-radius:16px; padding:16px; margin:12px 0; box-shadow:0 2px 12px rgba(0,0,0,.07); }
-    .quick { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
-    button,input,select,textarea { width:100%; font:inherit; border-radius:10px; padding:11px 12px; }
-    button { border:0; background:var(--accent); color:white; font-weight:750; cursor:pointer; touch-action:manipulation; }
-    button:active { transform:scale(.97); opacity:.88; }
-    .quick button { min-height:52px; padding:12px 4px; }
-    .status { min-height:44px; margin-top:12px; padding:10px; border-radius:10px; text-align:center; font-weight:700; background:#f9fafb; color:var(--muted); }
-    .status.success { background:#dcfce7; color:var(--success); }
-    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    label { display:block; font-weight:650; margin-bottom:5px; }
-    input,select,textarea { border:1px solid var(--line); background:white; color:var(--ink); }
-    textarea { min-height:74px; resize:vertical; }
-    .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
-    .secondary { background:#374151; }
-    .ghost { background:#e5e7eb; color:#111827; }
-    .danger { background:var(--danger); }
-    .entry { border-top:1px solid #e5e7eb; padding:12px 0; display:grid; grid-template-columns:1fr auto; gap:8px; }
-    .entry:first-child { border-top:0; }
-    .entry strong { display:block; font-size:1.08rem; }
-    .meta { color:var(--muted); font-size:.92rem; margin-top:3px; }
-    .pill { display:inline-block; padding:3px 8px; border-radius:999px; background:#dbeafe; color:#1e3a8a; font-size:.8rem; margin:5px 4px 0 0; }
-    .delete-one { width:auto; padding:8px 10px; align-self:start; background:#fee2e2; color:#991b1b; }
-    .empty { color:var(--muted); text-align:center; padding:20px 4px; }
-    .notice { font-size:.86rem; color:var(--muted); line-height:1.4; }
-    @media (max-width:520px) { .grid,.actions { grid-template-columns:1fr; } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Medication Effect Tracker</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#d1d5db;--accent:#2563eb;--danger:#b91c1c;--success:#166534;--warning:#b45309}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}main{max-width:720px;margin:auto;padding:18px 14px 48px}h1{font-size:1.65rem;margin:0 0 4px}h2{margin:0 0 12px}.subtitle{margin:0 0 18px;color:var(--muted)}.card{background:var(--card);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.quick button{min-height:64px;font-size:1.05rem}.quick .side{background:var(--warning)}button,input,select,textarea{width:100%;font:inherit;border-radius:11px;padding:12px}button{border:0;background:var(--accent);color:#fff;font-weight:750;cursor:pointer;touch-action:manipulation}button:active{transform:scale(.97);opacity:.88}.secondary{background:#374151}.danger{background:var(--danger)}.ghost{background:#e5e7eb;color:#111827}.status{min-height:44px;margin-top:12px;padding:10px;border-radius:10px;text-align:center;font-weight:700;background:#f9fafb;color:var(--muted)}.status.success{background:#dcfce7;color:var(--success)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:12px;text-align:center}.metric strong{display:block;font-size:1.15rem}.metric span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}.cycle{border-top:1px solid #e5e7eb;padding:13px 0}.cycle:first-child{border-top:0}.cycle-title{font-weight:800;margin-bottom:7px}.cycle-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;font-size:.92rem}.cycle-grid span:nth-child(odd){color:var(--muted)}
+.entry{border-top:1px solid #e5e7eb;padding:12px 0;display:grid;grid-template-columns:1fr auto;gap:8px}.entry:first-child{border-top:0}.entry strong{display:block;font-size:1.05rem}.meta{color:var(--muted);font-size:.9rem;margin-top:3px}.note{margin-top:6px}.pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#dbeafe;color:#1e3a8a;font-size:.8rem;margin:5px 4px 0 0}.delete-one{width:auto;padding:8px 10px;align-self:start;background:#fee2e2;color:#991b1b}.empty{color:var(--muted);text-align:center;padding:18px 4px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.notice{font-size:.84rem;color:var(--muted);line-height:1.4}
+.modal{display:none;position:fixed;inset:0;background:rgba(17,24,39,.55);z-index:20;padding:20px;align-items:flex-end}.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:620px;margin:0 auto;border-radius:20px 20px 12px 12px;padding:18px;max-height:88vh;overflow:auto}.sheet h2{margin-bottom:4px}.sheet-sub{color:var(--muted);margin:0 0 14px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{background:#f3f4f6;color:#111827;border:2px solid transparent}.choice.selected{border-color:var(--accent);background:#dbeafe}.sheet label{display:block;font-weight:700;margin:14px 0 6px}.sheet textarea{border:1px solid var(--line);min-height:90px;resize:vertical}.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:520px){.metrics{grid-template-columns:1fr}.cycle-grid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <main>
-  <h1>Medication Effect Tracker</h1>
-  <p class="subtitle">Tap how the medication feels right now. The exact time is saved immediately.</p>
-  <section class="card">
-    <h2>Quick log</h2>
-    <div class="quick" id="quickButtons">
-      <button type="button" data-effect="Dose">Dose</button><button type="button" data-effect="Starting">Starting</button><button type="button" data-effect="Focused">Focused</button>
-      <button type="button" data-effect="Steady">Steady</button><button type="button" data-effect="Dipping">Dipping</button><button type="button" data-effect="Ended">Ended</button>
-      <button type="button" data-effect="Hungry">Hungry</button><button type="button" data-effect="Anxious">Anxious</button><button type="button" data-effect="Irritable">Irritable</button>
-      <button type="button" data-effect="Tired">Tired</button><button type="button" data-effect="Headache">Headache</button><button type="button" data-effect="Other">Other</button>
-    </div>
-    <div id="quickStatus" class="status" aria-live="polite">Ready</div>
-  </section>
-  <section class="card">
-    <h2>Detailed entry</h2>
-    <form id="logForm">
-      <div class="grid">
-        <div><label for="dateTime">Date and time</label><input id="dateTime" type="datetime-local" required></div>
-        <div><label for="effect">Effect</label><select id="effect"><option>Dose</option><option>Starting</option><option>Focused</option><option>Steady</option><option>Dipping</option><option>Ended</option><option>Hungry</option><option>Anxious</option><option>Irritable</option><option>Tired</option><option>Headache</option><option>Other</option></select></div>
-        <div><label for="dose">Dose</label><input id="dose" type="text" value="10 mg"></div>
-        <div><label for="focus">Focus: <span id="focusValue">5</span>/10</label><input id="focus" type="range" min="0" max="10" value="5"></div>
-        <div><label for="energy">Energy: <span id="energyValue">5</span>/10</label><input id="energy" type="range" min="0" max="10" value="5"></div>
-        <div><label for="mood">Mood</label><select id="mood"><option>Calm</option><option>Focused</option><option>Neutral</option><option>Irritable</option><option>Anxious</option><option>Tired</option></select></div>
-      </div>
-      <div style="margin-top:12px"><label for="notes">Notes or symptoms</label><textarea id="notes" placeholder="What changed? What were you doing?"></textarea></div>
-      <div class="actions"><button type="submit">Save entry</button><button type="button" class="ghost" id="resetButton">Reset</button></div>
-    </form>
-  </section>
-  <section class="card">
-    <h2>History</h2><div id="history"></div>
-    <div class="actions"><button type="button" class="secondary" id="exportButton">Export CSV</button><button type="button" class="danger" id="clearButton">Clear all data</button></div>
-  </section>
-  <p class="notice">Entries are stored in this browser. This tracker is not a medical device. Contact your prescriber or pharmacist for medication instructions.</p>
+<h1>Medication Effect Tracker</h1>
+<p class="subtitle">One tap records the current time. Side effects open a short detail form.</p>
+<section class="card">
+<h2>Log now</h2>
+<div class="quick" id="quickButtons">
+<button type="button" data-effect="Dose">💊 Dose</button>
+<button type="button" data-effect="Starting">▶️ Starting</button>
+<button type="button" data-effect="Focused">🎯 Focused</button>
+<button type="button" data-effect="Dipping">📉 Dipping</button>
+<button type="button" data-effect="Ended">⏹️ Ended</button>
+<button type="button" class="side" data-effect="Side Effect">⚠️ Side Effect</button>
+</div>
+<div id="quickStatus" class="status" aria-live="polite">Ready</div>
+</section>
+<section class="card">
+<h2>Today</h2>
+<div id="todayCycles"></div>
+</section>
+<section class="card">
+<h2>7-day averages</h2>
+<div class="metrics">
+<div class="metric"><strong id="avgStart">—</strong><span>Average onset</span></div>
+<div class="metric"><strong id="avgDip">—</strong><span>Average time to dip</span></div>
+<div class="metric"><strong id="avgEnd">—</strong><span>Average duration</span></div>
+</div>
+<div id="sideSummary" class="meta" style="margin-top:12px"></div>
+</section>
+<section class="card">
+<h2>Timeline</h2>
+<div id="history"></div>
+<div class="actions"><button type="button" class="secondary" id="exportButton">Export CSV</button><button type="button" class="danger" id="clearButton">Clear all</button></div>
+</section>
+<p class="notice">Entries remain on this device in your browser. This tracker is not a medical device. Contact your prescriber or pharmacist for dosing instructions or concerning symptoms.</p>
 </main>
+<div class="modal" id="sideModal" role="dialog" aria-modal="true" aria-labelledby="sideTitle">
+<div class="sheet">
+<h2 id="sideTitle">Describe the side effect</h2>
+<p class="sheet-sub" id="sideTime"></p>
+<div class="choices" id="sideChoices">
+<button type="button" class="choice" data-side="Headache">Headache</button>
+<button type="button" class="choice" data-side="Anxiety">Anxiety</button>
+<button type="button" class="choice" data-side="Jittery">Jittery</button>
+<button type="button" class="choice" data-side="Racing heart">Racing heart</button>
+<button type="button" class="choice" data-side="Appetite loss">Appetite loss</button>
+<button type="button" class="choice" data-side="Irritable">Irritable</button>
+<button type="button" class="choice" data-side="Tired">Tired</button>
+<button type="button" class="choice" data-side="Other">Other</button>
+</div>
+<label for="sideNotes">Details</label>
+<textarea id="sideNotes" placeholder="What did you notice? How strong was it? What were you doing?"></textarea>
+<div class="sheet-actions"><button type="button" id="saveSide">Save</button><button type="button" class="ghost" id="cancelSide">Cancel</button></div>
+</div>
+</div>
 <script>
 (function(){
-  "use strict";
-  var KEY="medEffectTrackerEntries";
-  function byId(id){return document.getElementById(id);}
-  function localDateTimeValue(date){date=date||new Date();function pad(n){return String(n).padStart(2,"0");}return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+"T"+pad(date.getHours())+":"+pad(date.getMinutes());}
-  function getEntries(){try{return JSON.parse(localStorage.getItem(KEY)||"[]");}catch(e){return[];}}
-  function saveEntries(entries){localStorage.setItem(KEY,JSON.stringify(entries));render();}
-  function newId(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+String(Math.random()).slice(2);}
-  function showStatus(message){var s=byId("quickStatus");s.textContent=message;s.classList.add("success");clearTimeout(window.quickStatusTimer);window.quickStatusTimer=setTimeout(function(){s.textContent="Ready";s.classList.remove("success");},3500);}
-  function quickLog(effect){var now=new Date(),entries=getEntries();entries.push({id:newId(),timestamp:now.toISOString(),effect:effect,dose:effect==="Dose"?"10 mg":"",focus:null,energy:null,mood:"",notes:""});saveEntries(entries);byId("effect").value=effect;byId("dateTime").value=localDateTimeValue(now);showStatus(effect+" logged at "+now.toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"}));}
-  function resetForm(){byId("dateTime").value=localDateTimeValue(new Date());byId("effect").value="Dose";byId("dose").value="10 mg";byId("focus").value="5";byId("energy").value="5";byId("focusValue").textContent="5";byId("energyValue").textContent="5";byId("mood").value="Calm";byId("notes").value="";}
-  function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];});}
-  function render(){var h=byId("history"),entries=getEntries().sort(function(a,b){return new Date(b.timestamp)-new Date(a.timestamp);});if(!entries.length){h.innerHTML='<div class="empty">No entries yet.</div>';return;}h.innerHTML=entries.map(function(e){var tags="";if(e.dose)tags+='<span class="pill">'+esc(e.dose)+'</span>';if(e.focus!==null&&e.focus!==undefined)tags+='<span class="pill">Focus '+esc(e.focus)+'/10</span>';if(e.energy!==null&&e.energy!==undefined)tags+='<span class="pill">Energy '+esc(e.energy)+'/10</span>';if(e.mood)tags+='<span class="pill">'+esc(e.mood)+'</span>';return '<div class="entry"><div><strong>'+esc(e.effect||e.event||"Other")+'</strong><div class="meta">'+new Date(e.timestamp).toLocaleString()+'</div><div>'+tags+'</div>'+(e.notes?'<div style="margin-top:7px">'+esc(e.notes)+'</div>':'')+'</div><button type="button" class="delete-one" data-delete-id="'+esc(e.id)+'">Delete</button></div>';}).join("");}
-  function exportCSV(){var entries=getEntries();if(!entries.length){alert("There are no entries to export.");return;}var headers=["timestamp","effect","dose","focus","energy","mood","notes"];function q(v){return '"'+String(v==null?"":v).replace(/"/g,'""')+'"';}var csv=[headers.join(",")].concat(entries.map(function(e){return headers.map(function(k){return q(e[k]);}).join(",");})).join("\n");var blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="medication-effect-log-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);}
-  document.addEventListener("DOMContentLoaded",function(){resetForm();render();byId("quickButtons").addEventListener("click",function(event){var b=event.target.closest("button[data-effect]");if(b){event.preventDefault();quickLog(b.getAttribute("data-effect"));}});byId("focus").addEventListener("input",function(){byId("focusValue").textContent=this.value;});byId("energy").addEventListener("input",function(){byId("energyValue").textContent=this.value;});byId("logForm").addEventListener("submit",function(event){event.preventDefault();var entries=getEntries();entries.push({id:newId(),timestamp:byId("dateTime").value,effect:byId("effect").value,dose:byId("dose").value.trim(),focus:Number(byId("focus").value),energy:Number(byId("energy").value),mood:byId("mood").value,notes:byId("notes").value.trim()});saveEntries(entries);showStatus(byId("effect").value+" entry saved");resetForm();});byId("history").addEventListener("click",function(event){var b=event.target.closest("button[data-delete-id]");if(b){saveEntries(getEntries().filter(function(e){return e.id!==b.getAttribute("data-delete-id");}));}});byId("resetButton").addEventListener("click",resetForm);byId("exportButton").addEventListener("click",exportCSV);byId("clearButton").addEventListener("click",function(){if(confirm("Delete every saved entry from this browser?")){localStorage.removeItem(KEY);render();showStatus("All entries cleared");}});});
+"use strict";
+var KEY="medEffectTrackerEntries",pendingSideTime=null,selectedSide="";
+function byId(id){return document.getElementById(id)}
+function getEntries(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}}
+function saveEntries(entries){localStorage.setItem(KEY,JSON.stringify(entries));renderAll()}
+function newId(){return(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+String(Math.random()).slice(2)}
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
+function effectName(e){return e.effect||e.event||"Other"}
+function parseTime(e){var d=new Date(e.timestamp);return isNaN(d.getTime())?null:d}
+function showStatus(message){var s=byId("quickStatus");s.textContent=message;s.classList.add("success");clearTimeout(window.statusTimer);window.statusTimer=setTimeout(function(){s.textContent="Ready";s.classList.remove("success")},3000)}
+function addEntry(effect,time,extra){var entries=getEntries();entries.push(Object.assign({id:newId(),timestamp:(time||new Date()).toISOString(),effect:effect,dose:effect==="Dose"?"10 mg":"",notes:""},extra||{}));saveEntries(entries)}
+function quickLog(effect){if(effect==="Side Effect"){openSideModal();return}var now=new Date();addEntry(effect,now);showStatus(effect+" logged at "+now.toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"}))}
+function openSideModal(){pendingSideTime=new Date();selectedSide="";byId("sideTime").textContent="Time: "+pendingSideTime.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});byId("sideNotes").value="";Array.prototype.forEach.call(document.querySelectorAll(".choice"),function(b){b.classList.remove("selected")});byId("sideModal").classList.add("open")}
+function closeSideModal(){byId("sideModal").classList.remove("open");pendingSideTime=null;selectedSide=""}
+function formatDuration(ms){if(ms==null||ms<0)return"—";var total=Math.round(ms/60000),h=Math.floor(total/60),m=total%60;return h?h+"h "+m+"m":m+"m"}
+function sameDay(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function buildCycles(entries){var sorted=entries.slice().filter(function(e){return parseTime(e)}).sort(function(a,b){return parseTime(a)-parseTime(b)}),cycles=[],current=null;sorted.forEach(function(e){var name=effectName(e);if(name==="Dose"){current={dose:e,events:[]};cycles.push(current)}else if(current){current.events.push(e)}});return cycles}
+function findEvent(cycle,name){return cycle.events.find(function(e){return effectName(e)===name})}
+function renderToday(){var root=byId("todayCycles"),today=new Date(),cycles=buildCycles(getEntries()).filter(function(c){return sameDay(parseTime(c.dose),today)});if(!cycles.length){root.innerHTML='<div class="empty">No doses logged today.</div>';return}root.innerHTML=cycles.map(function(c,i){var d=parseTime(c.dose),start=findEvent(c,"Starting"),focus=findEvent(c,"Focused"),dip=findEvent(c,"Dipping"),end=findEvent(c,"Ended");function line(label,e){return'<span>'+label+'</span><strong>'+(e?parseTime(e).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+' ('+formatDuration(parseTime(e)-d)+')':'—')+'</strong>'}return'<div class="cycle"><div class="cycle-title">Dose '+(i+1)+' · '+d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+'</div><div class="cycle-grid">'+line("Starting",start)+line("Focused",focus)+line("Dipping",dip)+line("Ended",end)+'</div></div>'}).join("")}
+function renderMetrics(){var cutoff=Date.now()-7*24*60*60*1000,cycles=buildCycles(getEntries()).filter(function(c){return parseTime(c.dose).getTime()>=cutoff}),starts=[],dips=[],ends=[];cycles.forEach(function(c){var d=parseTime(c.dose),s=findEvent(c,"Starting"),p=findEvent(c,"Dipping"),e=findEvent(c,"Ended");if(s)starts.push(parseTime(s)-d);if(p)dips.push(parseTime(p)-d);if(e)ends.push(parseTime(e)-d)});function avg(a){return a.length?a.reduce(function(x,y){return x+y},0)/a.length:null}byId("avgStart").textContent=formatDuration(avg(starts));byId("avgDip").textContent=formatDuration(avg(dips));byId("avgEnd").textContent=formatDuration(avg(ends));var counts={};getEntries().filter(function(e){return parseTime(e)&&parseTime(e).getTime()>=cutoff&&effectName(e)==="Side Effect"}).forEach(function(e){var key=e.sideEffect||"Unspecified";counts[key]=(counts[key]||0)+1});var items=Object.keys(counts).map(function(k){return k+": "+counts[k]});byId("sideSummary").textContent=items.length?"Side effects: "+items.join(" · "):"No side effects logged in the past 7 days."}
+function renderHistory(){var h=byId("history"),entries=getEntries().sort(function(a,b){return parseTime(b)-parseTime(a)});if(!entries.length){h.innerHTML='<div class="empty">No entries yet.</div>';return}h.innerHTML=entries.map(function(e){var d=parseTime(e),name=effectName(e),extra="";if(name==="Side Effect"&&e.sideEffect)extra='<span class="pill">'+esc(e.sideEffect)+'</span>';if(e.dose)extra+='<span class="pill">'+esc(e.dose)+'</span>';return'<div class="entry"><div><strong>'+esc(name)+'</strong><div class="meta">'+(d?d.toLocaleString():esc(e.timestamp))+'</div><div>'+extra+'</div>'+(e.notes?'<div class="note">'+esc(e.notes)+'</div>':'')+'</div><button type="button" class="delete-one" data-delete-id="'+esc(e.id)+'">Delete</button></div>'}).join("")}
+function renderAll(){renderToday();renderMetrics();renderHistory()}
+function exportCSV(){var entries=getEntries();if(!entries.length){alert("There are no entries to export.");return}var headers=["timestamp","effect","dose","sideEffect","notes"];function q(v){return'"'+String(v==null?"":v).replace(/"/g,'""')+'"'}var csv=[headers.join(",")].concat(entries.map(function(e){e.effect=effectName(e);return headers.map(function(k){return q(e[k])}).join(",")})).join("\n"),blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="medication-effect-log-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+document.addEventListener("DOMContentLoaded",function(){renderAll();byId("quickButtons").addEventListener("click",function(ev){var b=ev.target.closest("button[data-effect]");if(b)quickLog(b.getAttribute("data-effect"))});byId("sideChoices").addEventListener("click",function(ev){var b=ev.target.closest("button[data-side]");if(!b)return;selectedSide=b.getAttribute("data-side");Array.prototype.forEach.call(document.querySelectorAll(".choice"),function(x){x.classList.toggle("selected",x===b)})});byId("saveSide").addEventListener("click",function(){if(!selectedSide){alert("Choose a side effect first.");return}var notes=byId("sideNotes").value.trim(),time=pendingSideTime||new Date();addEntry("Side Effect",time,{sideEffect:selectedSide,notes:notes});closeSideModal();showStatus("Side effect logged at "+time.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}))});byId("cancelSide").addEventListener("click",closeSideModal);byId("sideModal").addEventListener("click",function(ev){if(ev.target===this)closeSideModal()});byId("history").addEventListener("click",function(ev){var b=ev.target.closest("button[data-delete-id]");if(b)saveEntries(getEntries().filter(function(e){return e.id!==b.getAttribute("data-delete-id")}))});byId("exportButton").addEventListener("click",exportCSV);byId("clearButton").addEventListener("click",function(){if(confirm("Delete every saved entry from this browser?")){localStorage.removeItem(KEY);renderAll();showStatus("All entries cleared")}})});
 })();
 </script>
 </body>
